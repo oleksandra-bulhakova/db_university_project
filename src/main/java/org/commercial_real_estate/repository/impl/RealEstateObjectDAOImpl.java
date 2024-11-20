@@ -25,29 +25,31 @@ public class RealEstateObjectDAOImpl implements RealEstateObjectDAO {
     public List<RealEstateObject> getAllRealEstateObjects() {
 
         List<RealEstateObject> realEstateObjects = new ArrayList<>();
-        // String query = "SELECT * FROM real_estate_object";
-        String query = "SELECT reo.id, s.street_name, reo.owner_id, reo.object_type_id, reo.area, reo.floor, reo.renovation, reo.furniture, reo.price, reo.building_number, reo.premise_number " +
+
+        String query = "SELECT reo.id, " +
+                "CONCAT(s.street_name, ', ', reo.building_number, ', прим. ', reo.premise_number) AS address, " +
+                "o.first_name, o.middle_name, o.last_name, ot.object_type_name, reo.area, reo.floor, " +
+                "reo.renovation, reo.furniture, reo.price " +
                 "FROM real_estate_object reo " +
-                "JOIN street s ON reo.street_id = s.id";
+                "JOIN street s ON reo.street_id = s.id " +
+                "JOIN owner o ON reo.owner_id = o.id " +
+                "JOIN object_type ot ON reo.object_type_id = ot.id";
 
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(query)) {
-            System.out.println("Attempting to connect to database: " + URL);
+
             while (resultSet.next()) {
                 RealEstateObject realEstateObject = new RealEstateObject();
                 realEstateObject.setId(resultSet.getLong("id"));
-                realEstateObject.setStreetName(resultSet.getString("street_name"));
-               // realEstateObject.setStreetId(resultSet.getLong("street_id"));
-                realEstateObject.setOwnerId(resultSet.getLong("owner_id"));
-                realEstateObject.setObjectTypeId(resultSet.getLong("object_type_id"));
+                realEstateObject.setAddress(resultSet.getString("address"));
+                realEstateObject.setOwnerFullName(resultSet.getString("first_name") + " "  + resultSet.getString("middle_name") + " " + resultSet.getString("last_name"));
+                realEstateObject.setObjectType(resultSet.getString("object_type_name"));
                 realEstateObject.setArea(resultSet.getInt("area"));
                 realEstateObject.setFloor(resultSet.getInt("floor"));
                 realEstateObject.setRenovation(resultSet.getBoolean("renovation"));
                 realEstateObject.setFurniture(resultSet.getBoolean("furniture"));
                 realEstateObject.setPrice(resultSet.getInt("price"));
-                realEstateObject.setBuildingNumber(resultSet.getString("building_number"));
-                realEstateObject.setPremiseNumber(resultSet.getInt("premise_number"));
                 realEstateObjects.add(realEstateObject);
             }
         } catch (SQLException e) {

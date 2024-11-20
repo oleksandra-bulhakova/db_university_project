@@ -17,4 +17,7 @@ public class RealEstateObject {
     private int price;
     private String buildingNumber;
     private int premiseNumber;
+    private String ownerFullName;
+    private String objectType;
+    private String address;
 }
