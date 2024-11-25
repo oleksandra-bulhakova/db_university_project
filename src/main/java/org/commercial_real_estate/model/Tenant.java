@@ -23,5 +23,7 @@ public class Tenant {
     private int budget;
     private int desiredArea;
     private String streetName;
-    private String AcquisitionSourceName;
+    private String acquisitionSourceName;
+    private String desiredDistrictName;
+    private String desiredObjectTypeName;
 }

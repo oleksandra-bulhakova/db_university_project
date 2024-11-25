@@ -53,7 +53,7 @@
       <td><%= demonstration.getTenantFullName() %></td>
       <td><%= demonstration.getRealtorFullName() %></td>
       <td>
-        <a href="edit-demonstration?id=<%= demonstration.getId() %>" class="btn btn-warning btn-sm">Edit</a>
+        <a href="edit-demo?id=<%= demonstration.getId() %>" class="btn btn-warning btn-sm">Edit</a>
         <br>
         <a href="delete-demonstration?id=<%= demonstration.getId() %>" class="btn btn-danger btn-sm mt-1">Delete</a>
       </td>

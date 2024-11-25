@@ -6,7 +6,9 @@ import org.commercial_real_estate.repository.OwnerDAO;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OwnerDAOImpl implements OwnerDAO {
 
@@ -84,5 +86,74 @@ public class OwnerDAOImpl implements OwnerDAO {
             e.printStackTrace();
         }
         return false;
+    }
+
+    @Override
+    public List<Map<String, Object>> getAllStreets() {
+        List<Map<String, Object>> streets = new ArrayList<>();
+        String query = "SELECT id, street_name FROM street";
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                Map<String, Object> street = new HashMap<>();
+                street.put("id", resultSet.getLong("id"));
+                street.put("name", resultSet.getString("street_name"));
+                streets.add(street);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return streets;
+    }
+
+    @Override
+    public List<Map<String, Object>> getAllAcquisitionSources() {
+        List<Map<String, Object>> sources = new ArrayList<>();
+        String query = "SELECT id, source_name FROM acquisition_source";  // Добавим id для дальнейшего использования
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+
+            while (resultSet.next()) {
+                Map<String, Object> source = new HashMap<>();
+                source.put("id", resultSet.getLong("id"));  // Сохраняем id источника
+                source.put("name", resultSet.getString("source_name"));  // Сохраняем имя источника
+                sources.add(source);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sources;
+    }
+
+    @Override
+    public Owner getOwnerById(long id) {
+        String query = "SELECT * FROM owner WHERE id = ?";
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setLong(1, id);
+            try (ResultSet resultSet = ps.executeQuery()) {
+                if (resultSet.next()) {
+                    Owner owner = new Owner();
+                    owner.setId(resultSet.getLong("id"));
+                    owner.setStreetId(resultSet.getLong("street_id"));
+                    owner.setAcquisitionSourceId(resultSet.getLong("acquisition_source_id"));
+                    owner.setFirstName(resultSet.getString("first_name"));
+                    owner.setLastName(resultSet.getString("last_name"));
+                    owner.setMiddleName(resultSet.getString("middle_name"));
+                    owner.setPhone(resultSet.getString("phone"));
+                    owner.setEmail(resultSet.getString("email"));
+                    owner.setAcquisitionDate(resultSet.getDate("acquisition_date"));
+                    owner.setBuildingNumber(resultSet.getString("building_number"));
+                    owner.setPremiseNumber(resultSet.getInt("premise_number"));
+                    return owner;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

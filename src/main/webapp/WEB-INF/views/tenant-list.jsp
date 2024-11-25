@@ -21,7 +21,7 @@
   <a href="/" class="btn btn-secondary mb-3">На головну</a>
   <a href="add-tenant" class="btn btn-primary mb-3 float-right">Додати нового арендатора</a>
 </div>
-<h1 class="container">Всі орендатори</h1>
+<h1 class="container">Всі орендарі</h1>
 <div class="container mt-3">
   <table class="table table-striped table-bordered table-hover">
     <thead class="thead-dark sticky-top">

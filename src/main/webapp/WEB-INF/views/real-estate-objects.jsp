@@ -64,7 +64,7 @@
                 <td><%= object.isFurniture() ? "Є" : "НЕМАЄ" %></td>
                 <td><%= object.getPrice() %></td>
                 <td>
-                    <a href="edit-real-estate-object?id=<%= object.getId() %>" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="edit-object?id=<%= object.getId() %>" class="btn btn-warning btn-sm">Edit</a>
                     <br>
                     <a href="delete-real-estate-object?id=<%= object.getId() %>" class="btn btn-danger btn-sm mt-1">Delete</a>
                 </td>
