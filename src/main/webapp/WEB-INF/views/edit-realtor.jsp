@@ -1,12 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: o.bulhakova
-  Date: 11/22/2024
-  Time: 12:07 AM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page import="org.commercial_real_estate.model.Realtor" %>
-<%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 

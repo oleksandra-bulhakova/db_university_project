@@ -156,4 +156,45 @@ public class OwnerDAOImpl implements OwnerDAO {
         }
         return null;
     }
+
+    @Override
+    public void createOwner(Owner owner) {
+        String query = "INSERT INTO owner (street_id, acquisition_source_id, first_name, last_name, " +
+                "middle_name, phone, email, acquisition_date, building_number, premise_number) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setLong(1, owner.getStreetId());
+            preparedStatement.setLong(2, owner.getAcquisitionSourceId());
+            preparedStatement.setString(3, owner.getFirstName());
+            preparedStatement.setString(4, owner.getLastName());
+            preparedStatement.setString(5, owner.getMiddleName());
+            preparedStatement.setString(6, owner.getPhone());
+            preparedStatement.setString(7, owner.getEmail());
+            preparedStatement.setDate(8, Date.valueOf(String.valueOf(owner.getAcquisitionDate())));
+            preparedStatement.setString(9, owner.getBuildingNumber());
+            preparedStatement.setInt(10, owner.getPremiseNumber());
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deleteOwner(long id) throws SQLIntegrityConstraintViolationException {
+        String query = "DELETE FROM owner WHERE id = ?";
+
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1451) {
+                throw new SQLIntegrityConstraintViolationException("Cannot delete owner: foreign key constraint violation", e);
+            } else {
+                e.printStackTrace();
+            }
+        }
+    }
 }

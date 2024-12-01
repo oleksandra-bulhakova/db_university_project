@@ -1,5 +1,6 @@
 package org.commercial_real_estate.repository.impl;
 
+import com.mysql.cj.jdbc.ConnectionWrapper;
 import org.commercial_real_estate.model.RealEstateObject;
 import org.commercial_real_estate.model.Tenant;
 import org.commercial_real_estate.repository.RealEstateObjectDAO;
@@ -220,5 +221,47 @@ public class RealEstateObjectDAOImpl implements RealEstateObjectDAO {
             throw new RuntimeException(e);
         }
         return owners;
+    }
+
+    @Override
+    public void createObject(RealEstateObject realEstateObject) {
+        String query = "INSERT INTO real_estate_object (street_id, owner_id, object_type_id, area, floor, renovation, furniture, price, building_number, premise_number) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setLong(1, realEstateObject.getStreetId());
+            preparedStatement.setLong(2, realEstateObject.getOwnerId());
+            preparedStatement.setLong(3, realEstateObject.getObjectTypeId());
+            preparedStatement.setInt(4, realEstateObject.getArea());
+            preparedStatement.setInt(5, realEstateObject.getFloor());
+            preparedStatement.setBoolean(6, realEstateObject.isRenovation());
+            preparedStatement.setBoolean(7, realEstateObject.isFurniture());
+            preparedStatement.setInt(8, realEstateObject.getPrice());
+            preparedStatement.setString(9, realEstateObject.getBuildingNumber());
+            preparedStatement.setInt(10, realEstateObject.getPremiseNumber());
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void deleteObjectByd(long id) throws SQLException {
+        String query = "DELETE FROM real_estate_object WHERE id = ?";
+
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1451) {
+                throw new SQLIntegrityConstraintViolationException("Cannot delete object: foreign key constraint violation", e);
+            } else {
+                throw e;
+            }
+        }
     }
 }

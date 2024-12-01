@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: o.bulhakova
-  Date: 11/19/2024
-  Time: 7:58 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page import="org.commercial_real_estate.model.RealEstateObject" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -13,13 +6,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real Estate Objects</title>
+    <title>Об'єкти</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container mt-3">
     <a href="/main" class="btn btn-secondary mb-3">На головну</a>
-    <a href="add-real-estate-object" class="btn btn-primary mb-3 float-right mr-0">
+    <a href="/real-estate-objects/create" class="btn btn-primary mb-3 float-right mr-0">
         Додати новий об'єкт
     </a>
 </div>
@@ -64,9 +57,9 @@
                 <td><%= object.isFurniture() ? "Є" : "НЕМАЄ" %></td>
                 <td><%= object.getPrice() %></td>
                 <td>
-                    <a href="edit-object?id=<%= object.getId() %>" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="edit-object?id=<%= object.getId() %>" class="btn btn-warning btn-sm">Редагувати</a>
                     <br>
-                    <a href="delete-real-estate-object?id=<%= object.getId() %>" class="btn btn-danger btn-sm mt-1">Delete</a>
+                    <a href="real-estate-objects/delete?id=<%= object.getId() %>" class="btn btn-danger btn-sm mt-1">Видалити</a>
                 </td>
             </tr>
          <%

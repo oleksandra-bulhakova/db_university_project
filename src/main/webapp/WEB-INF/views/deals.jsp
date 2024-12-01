@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: o.bulhakova
-  Date: 11/20/2024
-  Time: 9:18 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page import="org.commercial_real_estate.model.Deal" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -19,7 +12,7 @@
 <body>
 <div class="container mt-3">
   <a href="/" class="btn btn-secondary mb-3">На головну</a>
-  <a href="add-deal" class="btn btn-primary mb-3 float-right">Додати нову угоду</a>
+  <a href="deals/create-deal" class="btn btn-primary mb-3 float-right">Додати нову угоду</a>
 </div>
 <h1 class="container">Всі угоди</h1>
 <div class="container mt-3">
@@ -60,7 +53,7 @@
       <td>
         <a href="edit-deal?id=<%= deal.getId() %>" class="btn btn-warning btn-sm">Редагувати</a>
         <br>
-        <a href="delete-deal?id=<%= deal.getId() %>" class="btn btn-danger btn-sm mt-1">Видалити</a>
+        <a href="deals/delete?id=<%= deal.getId() %>" class="btn btn-danger btn-sm mt-1">Видалити</a>
       </td>
     </tr>
     <%

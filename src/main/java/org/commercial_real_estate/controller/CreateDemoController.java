@@ -1,6 +1,5 @@
 package org.commercial_real_estate.controller;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,21 +13,14 @@ import java.io.IOException;
 import java.sql.Date;
 import java.util.Map;
 
-@WebServlet("/edit-demo")
-public class EditDemonstrationController extends HttpServlet {
+@WebServlet("/demonstrations/create-demo")
+public class CreateDemoController extends HttpServlet {
 
-    private final DemonstrationDAO demonstrationDAO = new DemonstrationDAOImpl();
+    private DemonstrationDAO demonstrationDAO = new DemonstrationDAOImpl();
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        long demoId = Long.parseLong(request.getParameter("id"));
-        Demonstration demonstration = demonstrationDAO.getDemoById(demoId);
-
-        if (demonstration == null) {
-            response.sendRedirect("/");
-            return;
-        }
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        Demonstration demonstration = new Demonstration();
 
         request.setAttribute("demonstration", demonstration);
         Map<Long, String> objects = demonstrationDAO.getObjects();
@@ -40,23 +32,19 @@ public class EditDemonstrationController extends HttpServlet {
         Map<Long, String> realtors = demonstrationDAO.getRealtors();
         request.setAttribute("realtors", realtors);
 
-        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/edit-demo.jsp");
-        view.forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/create-demo.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        long demoId = Long.parseLong(request.getParameter("id"));
-
         Demonstration demonstration = new Demonstration();
-        demonstration.setId(demoId);
-        demonstration.setRealtorId(Long.parseLong(request.getParameter("realtor")));
-        demonstration.setDate(Date.valueOf(request.getParameter("demoDate")));
-        demonstration.setObjectId(Long.parseLong(request.getParameter("object")));
-        demonstration.setTenantId(Long.parseLong(request.getParameter("tenant")));
+        demonstration.setDate(Date.valueOf(String.valueOf(request.getParameter("demoDate"))));
         demonstration.setDemoStatusId(Long.parseLong(request.getParameter("status")));
+        demonstration.setRealtorId(Long.parseLong(request.getParameter("realtor")));
+        demonstration.setTenantId(Long.parseLong(request.getParameter("tenant")));
+        demonstration.setObjectId(Long.parseLong(request.getParameter("object")));
 
-        demonstrationDAO.updateDemo(demonstration);
+        demonstrationDAO.createDemo(demonstration);
         response.sendRedirect("/demonstrations");
     }
 }

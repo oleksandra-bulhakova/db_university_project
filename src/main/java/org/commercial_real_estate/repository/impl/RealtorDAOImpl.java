@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.sql.Date;
 
 public class RealtorDAOImpl implements RealtorDAO {
 
@@ -26,7 +27,7 @@ public class RealtorDAOImpl implements RealtorDAO {
     @Override
     public List<Realtor> getAllRealtors() {
         List<Realtor> realtors = new ArrayList<>();
-        String query = "SELECT r.id, CONCAT(r.first_name,' ', r.middle_name, ' ', r.last_name) AS full_name, " +
+        String query = "SELECT r.id, r.email, r.phone, CONCAT(r.first_name,' ', r.middle_name, ' ', r.last_name) AS full_name, " +
                 "CONCAT(s.street_name, ', ', r.building_number, ', кв. ', r.premise_number) AS address, " +
                 "ls.level_name AS level, ss.specialization_name AS specialization, ws.status_name AS working_status, r.start_date " +
                 "FROM realtor r " +
@@ -48,6 +49,9 @@ public class RealtorDAOImpl implements RealtorDAO {
                 realtor.setSpecialization(resultSet.getString("specialization"));
                 realtor.setWorkingStatus(resultSet.getString("working_status"));
                 realtor.setStartDate(resultSet.getDate("start_date"));
+                realtor.setEmail(resultSet.getString("email"));
+                realtor.setPhone(resultSet.getString("phone"));
+
                 realtors.add(realtor);
             }
         } catch (SQLException e) {
@@ -172,6 +176,15 @@ public class RealtorDAOImpl implements RealtorDAO {
 
     @Override
     public void updateRealtor(Realtor realtor) {
+        List<Realtor> realtors = getAllRealtors();
+        String email = realtor.getEmail();
+
+        if (realtors.stream()
+                .anyMatch(realtor1 -> realtor1.getEmail().equals(email) && realtor1.getId() != realtor.getId())) {
+            throw new IllegalArgumentException("The realtor with this email already exists: " + email);
+        }
+
+
         String query = "UPDATE realtor SET first_name = ?, last_name = ?, middle_name = ?, phone = ?, email = ?, " +
                 "street_id = ?, building_number = ?, premise_number = ?, specialization_id = ?, " +
                 "working_status_id = ?, level_id = ?, start_date = ? WHERE id = ?";
@@ -197,5 +210,59 @@ public class RealtorDAOImpl implements RealtorDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void createRealtor(Realtor realtor) {
+        List<Realtor> realtors = getAllRealtors();
+        String email = realtor.getEmail();
+
+        if (realtors.stream()
+                .anyMatch(realtor1 -> realtor1.getEmail().equals(email))) {
+            throw new IllegalArgumentException("A realtor with this email already exists: " + email);
+        }
+
+        String query = "INSERT INTO realtor (street_id, building_number, premise_number, working_status_id, level_id, " +
+                "specialization_id, first_name, last_name, middle_name, phone, email, start_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setLong(1, realtor.getStreetId());
+            preparedStatement.setString(2, realtor.getBuildingNumber());
+            preparedStatement.setInt(3, realtor.getPremiseNumber());
+            preparedStatement.setLong(4, realtor.getWorkingStatusId());
+            preparedStatement.setLong(5, realtor.getLevelId());
+            preparedStatement.setLong(6, realtor.getSpecializationId());
+            preparedStatement.setString(7, realtor.getFirstName());
+            preparedStatement.setString(8, realtor.getLastName());
+            preparedStatement.setString(9, realtor.getMiddleName());
+            preparedStatement.setString(10, realtor.getPhone());
+            preparedStatement.setString(11, realtor.getEmail());
+            preparedStatement.setDate(12, Date.valueOf(String.valueOf(realtor.getStartDate())));
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void deleteRealtor(long id) throws SQLIntegrityConstraintViolationException {
+        String query = "DELETE FROM realtor WHERE id = ?";
+
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1451) {
+                throw new SQLIntegrityConstraintViolationException("Cannot delete realtor: foreign key constraint violation", e);
+            } else {
+                e.printStackTrace();
+            }
+        }
+
     }
 }

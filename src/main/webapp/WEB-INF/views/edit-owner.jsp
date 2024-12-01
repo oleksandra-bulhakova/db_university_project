@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: o.bulhakova
-  Date: 11/21/2024
-  Time: 8:14 AM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page import="org.commercial_real_estate.model.Owner" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>

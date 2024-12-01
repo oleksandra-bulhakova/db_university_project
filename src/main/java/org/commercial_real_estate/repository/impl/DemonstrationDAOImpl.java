@@ -113,12 +113,15 @@ public class DemonstrationDAOImpl implements DemonstrationDAO {
                     demonstration.setDate(resultSet.getDate("date"));
                     demonstration.setDemoStatus(resultSet.getString("demo_status_name"));
                     demonstration.setDemoStatusId(resultSet.getLong("demo_status_id"));
-                    demonstration.setObjectAddress(resultSet.getString("street_name") + " " + resultSet.getString("object_building_number") + ", " + resultSet.getString("object_premise_number"));
+                    demonstration.setObjectAddress(resultSet.getString("street_name") + " " +
+                            resultSet.getString("object_building_number") + ", " + resultSet.getString("object_premise_number"));
                     demonstration.setObjectId(resultSet.getLong("object_id"));
                     demonstration.setTenantId(resultSet.getLong("tenant_id"));
-                    demonstration.setTenantFullName(resultSet.getString("tenant_first_name") + " " + resultSet.getString("tenant_middle_name") + " " + resultSet.getString("tenant_last_name"));
+                    demonstration.setTenantFullName(resultSet.getString("tenant_first_name") + " " +
+                            resultSet.getString("tenant_middle_name") + " " + resultSet.getString("tenant_last_name"));
                     demonstration.setRealtorId(resultSet.getLong("realtor_id"));
-                    demonstration.setRealtorFullName(resultSet.getString("realtor_first_name") + " " + resultSet.getString("realtor_middle_name") + " " + resultSet.getString("realtor_last_name"));
+                    demonstration.setRealtorFullName(resultSet.getString("realtor_first_name") + " " +
+                            resultSet.getString("realtor_middle_name") + " " + resultSet.getString("realtor_last_name"));
                 }
             }
 
@@ -256,6 +259,36 @@ public class DemonstrationDAOImpl implements DemonstrationDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    @Override
+    public void createDemo(Demonstration demonstration) {
+        String query = "INSERT INTO demonstration (date, demo_status_id, object_id, tenant_id, realtor_id) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setDate(1, (Date) demonstration.getDate());
+            preparedStatement.setLong(2, demonstration.getDemoStatusId());
+            preparedStatement.setLong(3, demonstration.getObjectId());
+            preparedStatement.setLong(4, demonstration.getTenantId());
+            preparedStatement.setLong(5, demonstration.getRealtorId());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void deleteDemo(long id) {
+        String query = "DELETE FROM demonstration WHERE id = ?";
+
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
+

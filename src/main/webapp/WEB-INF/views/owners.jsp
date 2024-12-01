@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: o.bulhakova
-  Date: 11/20/2024
-  Time: 12:49 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page import="org.commercial_real_estate.model.Owner" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -19,7 +12,7 @@
 <body>
 <div class="container mt-3">
   <a href="/" class="btn btn-secondary mb-3">На головну</a>
-  <a href="add-owner" class="btn btn-primary mb-3 float-right">Додати нового власника</a>
+  <a href="/owners/create-owner" class="btn btn-primary mb-3 float-right">Додати нового власника</a>
 </div>
 <h1 class="container">Всі власники</h1>
 <div class="container mt-3">
@@ -49,9 +42,9 @@
       <td><%= owner.getAcquisitionDate() %></td>
       <td><%= owner.getAcquisitionSourceName() %></td>
       <td>
-        <a href="edit-owner?id=<%= owner.getId() %>" class="btn btn-warning btn-sm">Edit</a>
+        <a href="edit-owner?id=<%= owner.getId() %>" class="btn btn-warning btn-sm">Редагувати</a>
         <br>
-        <a href="delete-owner?id=<%= owner.getId() %>" class="btn btn-danger btn-sm mt-1">Delete</a>
+        <a href="owners/delete?id=<%= owner.getId() %>" class="btn btn-danger btn-sm mt-1">Видалити</a>
       </td>
     </tr>
     <%

@@ -28,10 +28,13 @@ public class TenantDAOImpl implements TenantDAO {
 
         List<Tenant> tenants = new ArrayList<>();
         String query = "SELECT t.id, t.first_name, t.last_name, t.middle_name, t.phone, t.email, " +
-                "t.acquisition_date, t.building_number, t.premise_number, st.street_name, " +
-                "acq.source_name " +
+                "t.acquisition_date, t.building_number, t.premise_number, t.desired_area, t.budget, t.desired_district_id," +
+                "t.desired_object_type_id, st.street_name, " +
+                "acq.source_name, d.district_name, o.object_type_name " +
                 "FROM tenant t " +
                 "JOIN street st ON t.street_id = st.id " +
+                "JOIN district d ON t.desired_district_id = d.id " +
+                "JOIN object_type o ON t.desired_object_type_id = o.id " +
                 "JOIN acquisition_source acq ON t.acquisition_source_id = acq.id";
 
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
@@ -51,6 +54,12 @@ public class TenantDAOImpl implements TenantDAO {
                 tenant.setPremiseNumber(resultSet.getInt("premise_number"));
                 tenant.setStreetName(resultSet.getString("street_name"));
                 tenant.setAcquisitionSourceName(resultSet.getString("source_name"));
+                tenant.setDesiredObjectTypeId(resultSet.getLong("desired_object_type_id"));
+                tenant.setDesiredObjectTypeName(resultSet.getString("object_type_name"));
+                tenant.setDesiredDistrictId(resultSet.getLong("desired_district_id"));
+                tenant.setDesiredDistrictName(resultSet.getString("district_name"));
+                tenant.setDesiredArea(resultSet.getInt("desired_area"));
+                tenant.setBudget(resultSet.getInt("budget"));
                 tenants.add(tenant);
             }
         } catch (SQLException e) {
@@ -255,5 +264,59 @@ public class TenantDAOImpl implements TenantDAO {
             throw new RuntimeException(e);
         }
         return object_type;
+    }
+
+    @Override
+    public void createTenant(Tenant tenant) {
+        String email = tenant.getEmail();
+        List<Tenant> tenants = getAllTenants();
+        if (tenants.stream()
+                .anyMatch(t -> t.getEmail().equals(email))) {
+            throw new IllegalArgumentException("Tenant with this email already exists: " + email);
+        }
+
+        String query = "INSERT INTO tenant (street_id, acquisition_source_id, first_name, last_name, middle_name, " +
+                "phone, email, acquisition_date, building_number, premise_number, desired_object_type_id, desired_district_id, " +
+                "budget, desired_area) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setLong(1, tenant.getStreetId());
+            preparedStatement.setLong(2, tenant.getAcquisitionSourceId());
+            preparedStatement.setString(3, tenant.getFirstName());
+            preparedStatement.setString(4, tenant.getLastName());
+            preparedStatement.setString(5, tenant.getMiddleName());
+            preparedStatement.setString(6, tenant.getPhone());
+            preparedStatement.setString(7, tenant.getEmail());
+            preparedStatement.setDate(8, (Date) tenant.getAcquisitionDate());
+            preparedStatement.setString(9, tenant.getBuildingNumber());
+            preparedStatement.setInt(10, tenant.getPremiseNumber());
+            preparedStatement.setLong(11, tenant.getDesiredObjectTypeId());
+            preparedStatement.setLong(12, tenant.getDesiredDistrictId());
+            preparedStatement.setLong(13, tenant.getBudget());
+            preparedStatement.setLong(14, tenant.getDesiredArea());
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteTenant(long id) throws SQLIntegrityConstraintViolationException {
+        String query = "DELETE FROM tenant WHERE id = ?";
+
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1451) {
+                throw new SQLIntegrityConstraintViolationException("Cannot delete tenant: foreign key constraint violation", e);
+            }
+            else {
+                e.printStackTrace();
+            }
+        }
     }
 }

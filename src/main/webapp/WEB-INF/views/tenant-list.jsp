@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: o.bulhakova
-  Date: 11/20/2024
-  Time: 6:58 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page import="org.commercial_real_estate.model.Tenant" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -13,13 +6,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Арендаторы</title>
+  <title>Орендарі</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 <div class="container mt-3">
   <a href="/" class="btn btn-secondary mb-3">На головну</a>
-  <a href="add-tenant" class="btn btn-primary mb-3 float-right">Додати нового арендатора</a>
+  <a href="tenants/create-tenant" class="btn btn-primary mb-3 float-right">Додати нового оренларя</a>
 </div>
 <h1 class="container">Всі орендарі</h1>
 <div class="container mt-3">
@@ -32,6 +25,7 @@
       <th>Email</th>
       <th>Дата залучення</th>
       <th>Джерело залучення</th>
+      <th>Запит</th>
       <th>Дії</th>
     </tr>
     </thead>
@@ -48,10 +42,12 @@
       <td><%= tenant.getEmail() %></td>
       <td><%= tenant.getAcquisitionDate() %></td>
       <td><%= tenant.getAcquisitionSourceName() %></td>
+      <td><%= tenant.getDesiredDistrictName() + " район, тип приміщ. - " + tenant.getDesiredObjectTypeName() + ", " + tenant.getDesiredArea() + " м²." + " Бюджет " + tenant.getBudget() + " грн./міс." %></td>
+
       <td>
-        <a href="edit-tenant?id=<%= tenant.getId() %>" class="btn btn-warning btn-sm">Edit</a>
+        <a href="edit-tenant?id=<%= tenant.getId() %>" class="btn btn-warning btn-sm">Редагувати</a>
         <br>
-        <a href="delete-tenant?id=<%= tenant.getId() %>" class="btn btn-danger btn-sm mt-1">Delete</a>
+        <a href="tenants/delete?id=<%= tenant.getId() %>" class="btn btn-danger btn-sm mt-1">Видалити</a>
       </td>
     </tr>
     <%

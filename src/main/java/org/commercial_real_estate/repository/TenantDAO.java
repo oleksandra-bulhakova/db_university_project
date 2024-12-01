@@ -2,6 +2,7 @@ package org.commercial_real_estate.repository;
 
 import org.commercial_real_estate.model.Tenant;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Map;
 
@@ -14,4 +15,6 @@ public interface TenantDAO {
     public Map<Long, String> getAllAcquisitionSources();
     public Map<Long, String> getDistricts();
     public Map<Long, String> getObjectTypes();
+    public void createTenant(Tenant tenant);
+    public void deleteTenant(long id) throws SQLIntegrityConstraintViolationException;
 }
