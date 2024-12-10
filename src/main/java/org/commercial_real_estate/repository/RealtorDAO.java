@@ -19,5 +19,6 @@ public interface RealtorDAO {
     public void updateRealtor(Realtor realtor);
     public void createRealtor(Realtor realtor);
     public void deleteRealtor(long id) throws SQLIntegrityConstraintViolationException;
+    public List<Realtor> searchRealtors(String searchQuery) throws SQLException;
 
 }

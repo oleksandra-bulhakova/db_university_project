@@ -27,7 +27,8 @@ public class RealtorDAOImpl implements RealtorDAO {
     @Override
     public List<Realtor> getAllRealtors() {
         List<Realtor> realtors = new ArrayList<>();
-        String query = "SELECT r.id, r.email, r.phone, CONCAT(r.first_name,' ', r.middle_name, ' ', r.last_name) AS full_name, " +
+        String query = "SELECT r.id, r.email, r.phone, r.first_name, " +
+                "r.last_name, r.middle_name, CONCAT(r.first_name,' ', r.middle_name, ' ', r.last_name) AS full_name, " +
                 "CONCAT(s.street_name, ', ', r.building_number, ', кв. ', r.premise_number) AS address, " +
                 "ls.level_name AS level, ss.specialization_name AS specialization, ws.status_name AS working_status, r.start_date " +
                 "FROM realtor r " +
@@ -44,6 +45,9 @@ public class RealtorDAOImpl implements RealtorDAO {
                 Realtor realtor = new Realtor();
                 realtor.setId(resultSet.getLong("id"));
                 realtor.setFullName(resultSet.getString("full_name"));
+                realtor.setFirstName(resultSet.getString("first_name"));
+                realtor.setMiddleName(resultSet.getString("middle_name"));
+                realtor.setLastName(resultSet.getString("last_name"));
                 realtor.setAddress(resultSet.getString("address"));
                 realtor.setLevel(resultSet.getString("level"));
                 realtor.setSpecialization(resultSet.getString("specialization"));
@@ -226,7 +230,7 @@ public class RealtorDAOImpl implements RealtorDAO {
                 "specialization_id, first_name, last_name, middle_name, phone, email, start_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setLong(1, realtor.getStreetId());
             preparedStatement.setString(2, realtor.getBuildingNumber());
@@ -253,7 +257,7 @@ public class RealtorDAOImpl implements RealtorDAO {
         String query = "DELETE FROM realtor WHERE id = ?";
 
         try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-        PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
@@ -263,6 +267,46 @@ public class RealtorDAOImpl implements RealtorDAO {
                 e.printStackTrace();
             }
         }
+    }
 
+    @Override
+    public List<Realtor> searchRealtors(String searchQuery) throws SQLException {
+        List<Realtor> realtors = new ArrayList<>();
+        String query = "SELECT r.id, r.email, r.phone, r.first_name, " +
+                "r.last_name, r.middle_name, CONCAT(r.first_name,' ', r.middle_name, ' ', r.last_name) AS full_name, " +
+                "CONCAT(s.street_name, ', ', r.building_number, ', кв. ', r.premise_number) AS address, " +
+                "ls.level_name AS level, ss.specialization_name AS specialization, ws.status_name AS working_status, r.start_date " +
+                "FROM realtor r " +
+                "JOIN street s ON r.street_id = s.id " +
+                "JOIN level ls ON r.level_id = ls.id " +
+                "JOIN specialization ss ON r.specialization_id = ss.id " +
+                "JOIN working_status ws ON r.working_status_id = ws.id " +
+                "WHERE CONCAT(r.first_name, ' ', r.middle_name, ' ', r.last_name) LIKE ?";
+
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, "%" + searchQuery + "%");
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                Realtor realtor = new Realtor();
+                realtor.setId(resultSet.getLong("id"));
+                realtor.setFullName(resultSet.getString("full_name"));
+                realtor.setFirstName(resultSet.getString("first_name"));
+                realtor.setMiddleName(resultSet.getString("middle_name"));
+                realtor.setLastName(resultSet.getString("last_name"));
+                realtor.setAddress(resultSet.getString("address"));
+                realtor.setLevel(resultSet.getString("level"));
+                realtor.setSpecialization(resultSet.getString("specialization"));
+                realtor.setWorkingStatus(resultSet.getString("working_status"));
+                realtor.setStartDate(resultSet.getDate("start_date"));
+                realtor.setEmail(resultSet.getString("email"));
+                realtor.setPhone(resultSet.getString("phone"));
+                realtors.add(realtor);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return realtors;
     }
 }

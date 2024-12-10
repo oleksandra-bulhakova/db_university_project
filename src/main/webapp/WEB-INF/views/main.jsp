@@ -95,7 +95,7 @@
     <div class="col-md-6 menu-card">
       <div class="card">
         <div class="card-body text-center">
-          <a href="statistics" class="btn btn-warning btn-lg menu-button w-100">
+          <a href="stats" class="btn btn-warning btn-lg menu-button w-100">
             <i class="bi bi-bar-chart menu-icon"></i>Статистики
           </a>
         </div>

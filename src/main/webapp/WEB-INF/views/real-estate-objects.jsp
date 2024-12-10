@@ -8,6 +8,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Об'єкти</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        table {
+            width: 100%;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+    </style>
 </head>
 <body>
 <div class="container mt-3">
@@ -27,8 +36,9 @@
     </div>
 </div>
 <div class="container mt-3">
-    <table class="table table-striped table-bordered table-hover">
-        <thead class="thead-dark sticky-top">
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+            <thead class="thead-dark sticky-top">
             <tr>
                 <th>Адреса</th>
                 <th>Власник</th>
@@ -47,33 +57,42 @@
                 if (realEstateObjects != null && !realEstateObjects.isEmpty()) {
                     for (RealEstateObject object : realEstateObjects) {
             %>
-         <tr>
-                <td><%= object.getAddress() %></td>
-                <td><%= object.getOwnerFullName() %></td>
-                <td><%= object.getObjectType()%></td>
-                <td><%= object.getArea() %></td>
-                <td><%= object.getFloor() %></td>
-                <td><%= object.isRenovation() ? "Є" : "НЕМАЄ" %></td>
-                <td><%= object.isFurniture() ? "Є" : "НЕМАЄ" %></td>
-                <td><%= object.getPrice() %></td>
+            <tr>
+                <td><%= object.getAddress() %>
+                </td>
+                <td><%= object.getOwnerFullName() %>
+                </td>
+                <td><%= object.getObjectType()%>
+                </td>
+                <td><%= object.getArea() %>
+                </td>
+                <td><%= object.getFloor() %>
+                </td>
+                <td><%= object.isRenovation() ? "Є" : "НЕМАЄ" %>
+                </td>
+                <td><%= object.isFurniture() ? "Є" : "НЕМАЄ" %>
+                </td>
+                <td><%= object.getPrice() %>
+                </td>
                 <td>
                     <a href="edit-object?id=<%= object.getId() %>" class="btn btn-warning btn-sm">Редагувати</a>
                     <br>
                     <a href="real-estate-objects/delete?id=<%= object.getId() %>" class="btn btn-danger btn-sm mt-1">Видалити</a>
                 </td>
             </tr>
-         <%
-             }
-         } else {
+            <%
+                }
+            } else {
             %>
-         <tr>
-             <td colspan="12">No data available</td>
-         </tr>
-         <%
-             }
+            <tr>
+                <td colspan="12">No data available</td>
+            </tr>
+            <%
+                }
             %>
             </tbody>
         </table>
-        </div>
-        </body>
+    </div>
+</div>
+</body>
 </html>
