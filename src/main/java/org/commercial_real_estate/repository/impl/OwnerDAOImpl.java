@@ -1,7 +1,6 @@
 package org.commercial_real_estate.repository.impl;
 
-import lombok.Data;
-import org.commercial_real_estate.model.Owner;
+import org.commercial_real_estate.model.entities.Owner;
 import org.commercial_real_estate.repository.OwnerDAO;
 
 import java.sql.*;

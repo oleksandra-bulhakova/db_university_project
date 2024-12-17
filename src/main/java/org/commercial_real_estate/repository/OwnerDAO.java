@@ -1,8 +1,7 @@
 package org.commercial_real_estate.repository;
 
-import org.commercial_real_estate.model.Owner;
+import org.commercial_real_estate.model.entities.Owner;
 
-import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Map;

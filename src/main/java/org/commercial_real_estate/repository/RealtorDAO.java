@@ -1,6 +1,6 @@
 package org.commercial_real_estate.repository;
 
-import org.commercial_real_estate.model.Realtor;
+import org.commercial_real_estate.model.entities.Realtor;
 
 
 import java.sql.SQLException;

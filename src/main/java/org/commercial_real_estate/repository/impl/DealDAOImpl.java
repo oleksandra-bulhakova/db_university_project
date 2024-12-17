@@ -1,6 +1,6 @@
 package org.commercial_real_estate.repository.impl;
 
-import org.commercial_real_estate.model.Deal;
+import org.commercial_real_estate.model.entities.Deal;
 import org.commercial_real_estate.repository.DealDAO;
 
 import java.sql.*;

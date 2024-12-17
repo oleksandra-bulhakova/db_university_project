@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.Map" %>
-<%@ page import="org.commercial_real_estate.model.Tenant" %>
+<%@ page import="org.commercial_real_estate.model.entities.Tenant" %>
 <html>
 <head>
     <meta charset="UTF-8">

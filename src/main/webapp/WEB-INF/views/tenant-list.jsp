@@ -1,4 +1,4 @@
-<%@ page import="org.commercial_real_estate.model.Tenant" %>
+<%@ page import="org.commercial_real_estate.model.entities.Tenant" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 

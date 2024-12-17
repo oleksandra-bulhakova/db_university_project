@@ -1,6 +1,7 @@
 <%@ page import="java.util.Map" %>
-<%@ page import="org.commercial_real_estate.model.RealtorStatistics" %>
+<%@ page import="org.commercial_real_estate.model.serviceObjects.RealtorStatistics" %>
 <%@ page import="java.util.List" %>
+<%@ page import="org.commercial_real_estate.model.serviceObjects.DistrictStatistics" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,6 +38,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
+            padding-bottom: 20px;
         }
 
         .item {
@@ -95,9 +97,11 @@
         .statistics table, .statistics th, .statistics td {
             border: 1px solid #ddd;
         }
+
         .statistics td:first-child {
             text-align: left;
         }
+
         .statistics th {
             background-color: #fff9c4;
         }
@@ -110,56 +114,106 @@
 <div class="container">
     <h1>Статистика</h1>
     <div class="grid">
+        <%--        <div class="item">--%>
         <div class="item">
-            <div class="item">
-                <h3>За укладеними угодами рієлторів</h3>
-                <form class="form" method="post" action="stats">
-                    <input type="hidden" name="statisticsType" value="realtor">
-                    <input type="date" name="startDate1" value="<%= request.getParameter("startDate1") != null ? request.getParameter("startDate1") : "" %>" required>
-                    <input type="date" name="endDate1" value="<%= request.getParameter("endDate1") != null ? request.getParameter("endDate1") : "" %>" required>
-                    <button type="submit">Показати статистику</button>
-                </form>
+            <h3>За укладеними угодами рієлторів</h3>
+            <form class="form" method="post" action="stats">
+                <input type="hidden" name="statisticsType" value="realtor">
+                <input type="date" name="startDate1"
+                       value="<%= request.getParameter("startDate1") != null ? request.getParameter("startDate1") : "" %>"
+                       required>
+                <input type="date" name="endDate1"
+                       value="<%= request.getParameter("endDate1") != null ? request.getParameter("endDate1") : "" %>"
+                       required>
+                <button type="submit">Показати статистику</button>
+            </form>
 
-                <div class="statistics">
-                    <h2>Результати</h2>
-                    <table>
-                        <thead>
-                        <tr>
-                            <th>Рієлтор</th>
-                            <th>Кількість угод</th>
-                            <th>Серед. сума угоди, грн./міс.</th>
-                            <th>Серед. площа об'єкта, м²</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <%
-                            List<RealtorStatistics> realtorStats = (List<RealtorStatistics>) request.getAttribute("realtorStatistics");
-                            if (realtorStats != null) {
-                                for (RealtorStatistics stat : realtorStats) {
-                        %>
-                        <tr>
-                            <td><%= stat.getFirstName() + " " + stat.getLastName() %></td>
-                            <td><%= stat.getTotalDeals() %></td>
-                            <td><%= stat.getAvgAmount() %></td>
-                            <td><%= stat.getAvgArea() %></td>
-                        </tr>
-                        <% }
-                        }
-                        %>
-                        </tbody>
-                    </table>
-                </div>
+            <div class="statistics">
+                <h2>Результати</h2>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Рієлтор</th>
+                        <th>Кількість угод</th>
+                        <th>Серед. сума угоди, грн./міс.</th>
+                        <th>Серед. площа об'єкта, м²</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%
+                        List<RealtorStatistics> realtorStats = (List<RealtorStatistics>) request.getAttribute("realtorStatistics");
+                        if (realtorStats != null) {
+                            for (RealtorStatistics stat : realtorStats) {
+                    %>
+                    <tr>
+                        <td><%= stat.getFirstName() + " " + stat.getLastName() %>
+                        </td>
+                        <td><%= stat.getTotalDeals() %>
+                        </td>
+                        <td><%= stat.getAvgAmount() %>
+                        </td>
+                        <td><%= stat.getAvgArea() %>
+                        </td>
+                    </tr>
+                    <% }
+                    }
+                    %>
+                    </tbody>
+                </table>
+            </div>
+            <%--            </div>--%>
+        </div>
+        <div class="item">
+            <h3>За проведеними показами рієлторів</h3>
+            <form class="form" method="post" action="stats">
+                <input type="hidden" name="statisticsType" value="demo">
+                <input type="date" name="startDate2"
+                       value="<%= request.getParameter("startDate2") != null ? request.getParameter("startDate2") : "" %>"
+                       required>
+                <input type="date" name="endDate2"
+                       value="<%= request.getParameter("endDate2") != null ? request.getParameter("endDate2") : "" %>"
+                       required>
+                <button type="submit">Показати статистику</button>
+            </form>
+            <div class="statistics">
+                <h2>Результати</h2>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Рієлтор</th>
+                        <th>Проведено показів</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%
+                        Map<String, Integer> stats2 = (Map<String, Integer>) request.getAttribute("demoStatistics");
+                        if (stats2 != null) {
+                            for (Map.Entry<String, Integer> entry : stats2.entrySet()) {
+                    %>
+                    <tr>
+                        <td><%= entry.getKey() %>
+                        </td>
+                        <td><%= entry.getValue() %>
+                        </td>
+                    </tr>
+                    <% }
+                    }
+                    %>
+                    </tbody>
+                </table>
             </div>
         </div>
-        <div class="item">Окно 2</div>
-        <div class="item">Окно 3</div>
-        <div class="item">Окно 4</div>
+        <%--<div class="item">Вікно 3</div>--%>
         <div class="item">
             <h3>За джерелами залучення клієнтів</h3>
             <form class="form" method="post" action="stats">
                 <input type="hidden" name="statisticsType" value="source">
-                <input type="date" name="startDate5" value="<%= request.getParameter("startDate5") != null ? request.getParameter("startDate5") : "" %>" required>
-                <input type="date" name="endDate5" value="<%= request.getParameter("endDate5") != null ? request.getParameter("endDate5") : "" %>" required>
+                <input type="date" name="startDate5"
+                       value="<%= request.getParameter("startDate5") != null ? request.getParameter("startDate5") : "" %>"
+                       required>
+                <input type="date" name="endDate5"
+                       value="<%= request.getParameter("endDate5") != null ? request.getParameter("endDate5") : "" %>"
+                       required>
                 <button type="submit">Показати статистику</button>
             </form>
 
@@ -170,7 +224,7 @@
                     <thead>
                     <tr>
                         <th>Джерела</th>
-                        <th>Залучено об'єктів в роботу </th>
+                        <th>Залучено об'єктів в роботу</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -183,6 +237,53 @@
                         <td><%= entry.getKey() %>
                         </td>
                         <td><%= entry.getValue() %>
+                        </td>
+                    </tr>
+                    <% }
+                    }
+                    %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="item">
+            <h3>За районами</h3>
+            <form class="form" method="post" action="stats">
+                <input type="hidden" name="statisticsType" value="district">
+                <input type="date" name="startDate3"
+                       value="<%= request.getParameter("startDate3") != null ? request.getParameter("startDate3") : "" %>"
+                       required>
+                <input type="date" name="endDate3"
+                       value="<%= request.getParameter("endDate3") != null ? request.getParameter("endDate3") : "" %>"
+                       required>
+                <button type="submit">Показати статистику</button>
+            </form>
+
+            <div class="statistics">
+                <h2>Результати</h2>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Район</th>
+                        <th>Кількість угод</th>
+                        <th>Серед. сума угоди, грн./міс.</th>
+                        <th>Показів до угоди</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <%
+                        List<DistrictStatistics> districtStats = (List<DistrictStatistics>) request.getAttribute("districtStatistics");
+                        if (districtStats != null) {
+                            for (DistrictStatistics stat : districtStats) {
+                    %>
+                    <tr>
+                        <td><%= stat.getDistrictName() %>
+                        </td>
+                        <td><%= stat.getTotalDeals() %>
+                        </td>
+                        <td><%= stat.getAverageDealPrice() %>
+                        </td>
+                        <td><%= stat.getAverageDemosPerDeal() %>
                         </td>
                     </tr>
                     <% }

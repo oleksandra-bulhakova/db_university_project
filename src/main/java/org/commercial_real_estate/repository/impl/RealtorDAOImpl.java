@@ -1,6 +1,6 @@
 package org.commercial_real_estate.repository.impl;
 
-import org.commercial_real_estate.model.Realtor;
+import org.commercial_real_estate.model.entities.Realtor;
 import org.commercial_real_estate.repository.RealtorDAO;
 
 import java.sql.*;

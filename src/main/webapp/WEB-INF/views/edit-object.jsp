@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="org.commercial_real_estate.model.RealEstateObject" %>
+<%@ page import="org.commercial_real_estate.model.entities.RealEstateObject" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="java.util.List" %>
 <html>

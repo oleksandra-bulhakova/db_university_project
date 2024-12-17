@@ -1,7 +1,6 @@
 package org.commercial_real_estate.repository.impl;
 
-import org.commercial_real_estate.model.Demonstration;
-import org.commercial_real_estate.model.Tenant;
+import org.commercial_real_estate.model.entities.Demonstration;
 import org.commercial_real_estate.repository.DemonstrationDAO;
 
 import java.sql.*;

@@ -1,8 +1,6 @@
 package org.commercial_real_estate.repository.impl;
 
-import com.mysql.cj.jdbc.ConnectionWrapper;
-import org.commercial_real_estate.model.RealEstateObject;
-import org.commercial_real_estate.model.Tenant;
+import org.commercial_real_estate.model.entities.RealEstateObject;
 import org.commercial_real_estate.repository.RealEstateObjectDAO;
 
 import java.sql.*;

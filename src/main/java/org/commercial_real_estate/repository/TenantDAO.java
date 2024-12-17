@@ -1,6 +1,6 @@
 package org.commercial_real_estate.repository;
 
-import org.commercial_real_estate.model.Tenant;
+import org.commercial_real_estate.model.entities.Tenant;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
