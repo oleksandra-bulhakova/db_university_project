@@ -15,7 +15,7 @@
   <h2>Введіть ваш SQL запит</h2>
   <form action="execute-query" method="post">
     <div class="form-group">
-      <label for="query">SQL Запит:</label>
+      <label for="query">SQL запит:</label>
       <textarea id="query" name="query" class="form-control" rows="5" required></textarea>
     </div>
     <button type="submit" class="btn btn-primary">Виконати запит</button>
