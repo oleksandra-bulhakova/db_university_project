@@ -17,4 +17,5 @@ public interface TenantDAO {
     public Map<Long, String> getObjectTypes();
     public void createTenant(Tenant tenant);
     public void deleteTenant(long id) throws SQLIntegrityConstraintViolationException;
+    public List<Tenant> searchByName(String searchQuery);
 }

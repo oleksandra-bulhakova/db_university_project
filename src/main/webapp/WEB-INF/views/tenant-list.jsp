@@ -25,6 +25,38 @@
         .btn-wide {
             width: auto;
         }
+        .button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-start;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            margin-top: 10px;
+            margin-left: 0;
+            padding-left: 0;
+            box-sizing: border-box;
+            gap: 15px;
+        }
+        .form input, .form button {
+            margin: 0 3px;
+            padding: 10px 20px;
+            font-size: 16px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            line-height: normal;
+            text-align: center;
+        }
+        .form button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -34,6 +66,18 @@
 </div>
 <h1 class="container">Всі орендарі</h1>
 <div class="container mt-3">
+
+    <form action="/tenants" method="get" class="mb-3">
+        <input type="text"
+               name="search"
+               value="<%= request.getAttribute("searchQuery") != null ? request.getAttribute("searchQuery") : "" %>"
+               placeholder="Пошук за ПІБ" class="form-control"/>
+        <div class="button-container">
+            <button type="submit" class="btn btn-success">Пошук</button>
+            <a href="/tenants" class="btn btn-info">Скинути</a>
+        </div>
+    </form>
+
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <thead class="thead-dark sticky-top">

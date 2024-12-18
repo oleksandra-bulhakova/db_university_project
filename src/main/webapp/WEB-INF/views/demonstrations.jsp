@@ -12,6 +12,32 @@
     table {
       width: 100%;
     }
+    .form {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      margin-top: 10px;
+      margin-left: 0;
+      padding-left: 0;
+      box-sizing: border-box;
+    }
+    .form input, .form button {
+      margin: 0 3px;
+      padding: 10px 20px;
+      font-size: 16px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      line-height: normal;
+      text-align: center;
+    }
+    .form button {
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
     button, .btn {
       height: 38px;
       width: 100px;
@@ -20,6 +46,16 @@
     }
     .btn-wide {
       width: auto;
+    }
+    .startDateInput {
+      margin-left: 0 !important;
+      padding: 10px 20px;
+      font-size: 16px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      line-height: normal;
+      text-align: center;
     }
   </style>
 </head>
@@ -36,6 +72,17 @@
   </div>
 </div>
 <div class="container mt-3">
+
+  <form class="form" action="demonstrations" method="get">
+    <input type="hidden" name="filterType" value="dates">
+    <label for="startDate"></label>
+    <input type="date" id="startDate" name="startDate" class="startDateInput" value="<%= request.getParameter("startDate") != null ? request.getParameter("startDate") : "" %>" required>
+    <label for="endDate"></label>
+    <input type="date" id="endDate" name="endDate" value="<%= request.getParameter("endDate") != null ? request.getParameter("endDate") : "" %>" required>
+    <button class="submit" type="submit">Знайти</button>
+    <a href="demonstrations" class="btn btn-info">Скинути</a>
+  </form>
+
   <table class="table table-striped table-bordered table-hover">
     <thead class="thead-dark sticky-top">
     <tr>
@@ -70,7 +117,7 @@
     } else {
     %>
     <tr>
-      <td colspan="6">Немає даних</td>
+      <td colspan="6">Немає підходящих даних</td>
     </tr>
     <%
       }

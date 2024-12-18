@@ -3,6 +3,7 @@ package org.commercial_real_estate.repository.impl;
 import org.commercial_real_estate.model.entities.Deal;
 import org.commercial_real_estate.repository.DealDAO;
 
+import java.lang.reflect.ParameterizedType;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -292,5 +293,47 @@ public class DealDAOImpl implements DealDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public List<Deal> filterByDate(Date startDate, Date endDate) {
+        List<Deal> deals = new ArrayList<>();
+
+        String query = "SELECT d.id, d.date, ds.name AS deal_status, " +
+                "CONCAT(s.street_name, ', ', o.building_number, ', прим. ', o.premise_number) AS object_address, " +
+                "CONCAT(t.first_name, ' ', t.middle_name, ' ', t.last_name) AS tenant_full_name, " +
+                "CONCAT(r.first_name, ' ', r.middle_name, ' ', r.last_name) AS realtor_full_name, " +
+                "d.price " +
+                "FROM deal d " +
+                "JOIN deal_status ds ON d.deal_status_id = ds.id " +
+                "JOIN real_estate_object o ON d.object_id = o.id " +
+                "JOIN street s ON o.street_id = s.id " +
+                "JOIN tenant t ON d.tenant_id = t.id " +
+                "JOIN realtor r ON d.realtor_id = r.id " +
+                "WHERE d.date BETWEEN ? AND ?";
+
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setDate(1, (Date) startDate);
+            preparedStatement.setDate(2, (Date) endDate);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Deal deal = new Deal();
+                deal.setId(resultSet.getLong("id"));
+                deal.setDate(resultSet.getDate("date"));
+                deal.setDealStatus(resultSet.getString("deal_status"));
+                deal.setObjectAddress(resultSet.getString("object_address"));
+                deal.setTenantFullName(resultSet.getString("tenant_full_name"));
+                deal.setRealtorFullName(resultSet.getString("realtor_full_name"));
+                deal.setPrice(resultSet.getInt("price"));
+                deals.add(deal);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return deals;
     }
 }

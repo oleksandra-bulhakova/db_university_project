@@ -16,14 +16,32 @@
         .table-responsive {
             overflow-x: auto;
         }
+
         button, .btn {
             height: 38px;
             width: 100px;
             padding: 0 15px;
             line-height: 38px;
         }
+
         .btn-wide {
             width: auto;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-start;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input[type="text"] {
+            width: 100%;
         }
     </style>
 </head>
@@ -45,6 +63,16 @@
     </div>
 </div>
 <div class="container mt-3">
+    <form action="/real-estate-objects" method="get" class="mb-3">
+        <input type="text"
+               name="search"
+               value="<%= request.getAttribute("searchQuery") != null ? request.getAttribute("searchQuery") : "" %>"
+               placeholder="Пошук за адресою" class="form-control"/>
+        <div class="button-container">
+            <button type="submit" class="btn btn-success">Пошук</button>
+            <a href="/real-estate-objects" class="btn btn-info">Скинути</a>
+        </div>
+    </form>
     <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
             <thead class="thead-dark sticky-top">
@@ -56,7 +84,17 @@
                 <th>Поверх</th>
                 <th>Ремонт</th>
                 <th>Меблі</th>
-                <th>Ціна, грн./міс.</th>
+                <th>
+                    <span>Ціна, грн./міс.</span>
+                    <a
+                            href="?sortDirection=asc<%= request.getAttribute("searchQuery") != null ? "&search=" + request.getAttribute("searchQuery") : "" %>"
+                            title="asc"
+                            style="margin-left: 8px; text-decoration: none; font-size: 16px;">&#9650;</a>
+                    <a
+                            href="?sortDirection=desc<%= request.getAttribute("searchQuery") != null ? "&search=" + request.getAttribute("searchQuery") : "" %>"
+                            title="desc"
+                            style="margin-left: 4px; text-decoration: none; font-size: 16px;">&#9660;</a>
+                </th>
                 <th>Дії</th>
             </tr>
             </thead>
@@ -94,7 +132,7 @@
             } else {
             %>
             <tr>
-                <td colspan="12">No data available</td>
+                <td colspan="12">Немає підходящих даних</td>
             </tr>
             <%
                 }

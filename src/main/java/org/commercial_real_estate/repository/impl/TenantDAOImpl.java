@@ -319,4 +319,53 @@ public class TenantDAOImpl implements TenantDAO {
             }
         }
     }
+
+    @Override
+    public List<Tenant> searchByName(String searchQuery) {
+
+        List<Tenant> tenants = new ArrayList<>();
+        String query = "SELECT t.id, t.first_name, t.last_name, t.middle_name, t.phone, t.email, " +
+                "t.acquisition_date, t.building_number, t.premise_number, t.desired_area, t.budget, t.desired_district_id," +
+                "t.desired_object_type_id, st.street_name, " +
+                "acq.source_name, d.district_name, o.object_type_name " +
+                "FROM tenant t " +
+                "JOIN street st ON t.street_id = st.id " +
+                "JOIN district d ON t.desired_district_id = d.id " +
+                "JOIN object_type o ON t.desired_object_type_id = o.id " +
+                "JOIN acquisition_source acq ON t.acquisition_source_id = acq.id " +
+                "WHERE CONCAT(t.first_name, ' ', t.middle_name, ' ', t.last_name) LIKE ?";
+
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1, "%" + searchQuery + "%");
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Tenant tenant = new Tenant();
+                tenant.setId(resultSet.getLong("id"));
+                tenant.setFirstName(resultSet.getString("first_name"));
+                tenant.setLastName(resultSet.getString("last_name"));
+                tenant.setMiddleName(resultSet.getString("middle_name"));
+                tenant.setPhone(resultSet.getString("phone"));
+                tenant.setEmail(resultSet.getString("email"));
+                tenant.setAcquisitionDate(resultSet.getDate("acquisition_date"));
+                tenant.setBuildingNumber(resultSet.getString("building_number"));
+                tenant.setPremiseNumber(resultSet.getInt("premise_number"));
+                tenant.setStreetName(resultSet.getString("street_name"));
+                tenant.setAcquisitionSourceName(resultSet.getString("source_name"));
+                tenant.setDesiredObjectTypeId(resultSet.getLong("desired_object_type_id"));
+                tenant.setDesiredObjectTypeName(resultSet.getString("object_type_name"));
+                tenant.setDesiredDistrictId(resultSet.getLong("desired_district_id"));
+                tenant.setDesiredDistrictName(resultSet.getString("district_name"));
+                tenant.setDesiredArea(resultSet.getInt("desired_area"));
+                tenant.setBudget(resultSet.getInt("budget"));
+                tenants.add(tenant);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tenants;
+    }
+
 }

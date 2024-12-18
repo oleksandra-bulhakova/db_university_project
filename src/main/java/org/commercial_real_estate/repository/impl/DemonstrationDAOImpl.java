@@ -289,5 +289,42 @@ public class DemonstrationDAOImpl implements DemonstrationDAO {
             e.printStackTrace();
         }
     }
+
+    @Override
+    public List<Demonstration> filterByDate(Date startDate, Date endDate) {
+        List<Demonstration> demonstrations = new ArrayList<>();
+        String query = "SELECT d.id, d.date, ds.name AS demo_status, " +
+                "CONCAT(s.street_name, ', ', o.building_number, ', прим. ', o.premise_number) AS object_address, " +
+                "CONCAT(t.first_name, ' ', t.middle_name, ' ', t.last_name) AS tenant_full_name, " +
+                "CONCAT(r.first_name, ' ', r.middle_name, ' ', r.last_name) AS realtor_full_name " +
+                "FROM demonstration d " +
+                "JOIN demo_status ds ON d.demo_status_id = ds.id " +
+                "JOIN real_estate_object o ON d.object_id = o.id " +
+                "JOIN street s ON o.street_id = s.id " +
+                "JOIN tenant t ON d.tenant_id = t.id " +
+                "JOIN realtor r ON d.realtor_id = r.id " +
+                "WHERE d.date BETWEEN ? AND ?";
+
+        try (Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setDate(1, startDate);
+            preparedStatement.setDate(2, endDate);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Demonstration demonstration = new Demonstration();
+                demonstration.setId(resultSet.getLong("id"));
+                demonstration.setDate(resultSet.getDate("date"));
+                demonstration.setDemoStatus(resultSet.getString("demo_status"));
+                demonstration.setObjectAddress(resultSet.getString("object_address"));
+                demonstration.setTenantFullName(resultSet.getString("tenant_full_name"));
+                demonstration.setRealtorFullName(resultSet.getString("realtor_full_name"));
+                demonstrations.add(demonstration);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return demonstrations;
+    }
 }
 

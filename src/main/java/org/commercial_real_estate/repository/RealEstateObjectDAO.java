@@ -16,4 +16,5 @@ public interface RealEstateObjectDAO {
     public Map<Long, String> getOwners();
     public void createObject(RealEstateObject realEstateObject);
     public void deleteObjectByd(long id) throws SQLException;
+    public List<RealEstateObject> searchObjects(String searchQuery);
 }

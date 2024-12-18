@@ -19,7 +19,16 @@ public class TenantController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<Tenant> tenants = tenantDAO.getAllTenants();
+        String searchQuery = request.getParameter("search");
+        List<Tenant> tenants;
+
+        if (searchQuery != null && !searchQuery.isEmpty()) {
+            tenants = tenantDAO.searchByName(searchQuery);
+            request.setAttribute("searchQuery", searchQuery);
+        } else {
+            tenants = tenantDAO.getAllTenants();
+        }
+
         request.setAttribute("tenants", tenants);
         request.getRequestDispatcher("/WEB-INF/views/tenant-list.jsp").forward(request, response);
     }

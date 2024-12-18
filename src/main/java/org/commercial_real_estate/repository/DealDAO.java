@@ -2,6 +2,7 @@ package org.commercial_real_estate.repository;
 
 import org.commercial_real_estate.model.entities.Deal;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -16,5 +17,6 @@ public interface DealDAO {
     public void updateDeal(Deal deal);
     public void createDeal(Deal deal);
     public void deleteDeal(long id);
+    public List<Deal> filterByDate(Date startDate, Date endDate);
 
 }
