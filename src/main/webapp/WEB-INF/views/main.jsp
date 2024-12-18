@@ -125,7 +125,7 @@
     <div class="col-md-6 menu-card">
       <div class="card">
         <div class="card-body text-center">
-          <a href="reports" class="btn btn-warning btn-lg menu-button w-100" style="background-color: #ff9f00;">
+          <a href="execute-query" class="btn btn-warning btn-lg menu-button w-100" style="background-color: #ff9f00;">
             <i class="bi bi-lightning menu-icon"></i>SQL запит
           </a>
         </div>
