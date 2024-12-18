@@ -16,12 +16,21 @@
         .table-responsive {
             overflow-x: auto;
         }
+        button, .btn {
+            height: 38px;
+            width: 100px;
+            padding: 0 15px;
+            line-height: 38px;
+        }
+        .btn-wide {
+            width: auto;
+        }
     </style>
 </head>
 <body>
 <div class="container mt-3">
-    <a href="/" class="btn btn-secondary mb-3">На головну</a>
-    <a href="tenants/create-tenant" class="btn btn-primary mb-3 float-right">Додати нового орендаря</a>
+    <a href="/" class="btn btn-secondary btn-wide mb-3">На головну</a>
+    <a href="tenants/create-tenant" class="btn btn-primary btn-wide mb-3 float-right">Додати нового орендаря</a>
 </div>
 <h1 class="container">Всі орендарі</h1>
 <div class="container mt-3">

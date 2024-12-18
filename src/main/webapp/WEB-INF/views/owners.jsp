@@ -8,11 +8,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Власники</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    table {
+      width: 100%;
+    }
+    button, .btn {
+      height: 38px;
+      width: 100px;
+      padding: 0 15px;
+      line-height: 38px;
+    }
+    .btn-wide {
+      width: auto;
+    }
+  </style>
 </head>
 <body>
 <div class="container mt-3">
-  <a href="/" class="btn btn-secondary mb-3">На головну</a>
-  <a href="/owners/create-owner" class="btn btn-primary mb-3 float-right">Додати нового власника</a>
+  <a href="/" class="btn btn-secondary btn-wide mb-3">На головну</a>
+  <a href="/owners/create-owner" class="btn btn-primary btn-wide mb-3 float-right">Додати нового власника</a>
 </div>
 <h1 class="container">Всі власники</h1>
 <div class="container mt-3">
