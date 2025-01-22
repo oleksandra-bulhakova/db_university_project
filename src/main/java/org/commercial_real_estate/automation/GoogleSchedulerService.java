@@ -14,7 +14,7 @@ public class GoogleSchedulerService {
             //String cronExpression = "0 6 * * 1";
             String cronExpression = "*/2 * * * *";
 
-            String url = "https://abbd-109-86-224-61.ngrok-free.app/generate-report?email=" + email;
+            String url = "https://f607-109-86-224-61.ngrok-free.app/generate-report?email=" + email;
             String method = "POST";
 
             HttpTarget httpTarget = HttpTarget.newBuilder()

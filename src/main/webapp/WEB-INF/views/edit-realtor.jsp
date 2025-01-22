@@ -92,7 +92,7 @@
             </div>
 
             <div class="form-group mb-3">
-                <label for="levelId">Сеньорити:</label>
+                <label for="levelId">Сеньоріті:</label>
                 <select id="levelId" name="levelId" required>
                     <%
                         Map<Long, String> levels = (Map<Long, String>) request.getAttribute("levels");
